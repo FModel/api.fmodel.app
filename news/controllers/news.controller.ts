@@ -27,11 +27,15 @@ class NewsController {
 
     async getNewsByVersion(req: express.Request, res: express.Response) {
         const news = await newsService.getNewsByVersion(req.params.version);
-        res.status(200).send({
-            messages: news.messages.split(';'),
-            colors: news.colors.split(';'),
-            newLines: news.newLines.split(';'),
-        });
+        if (news) {
+            res.status(200).send({
+                messages: news.messages.split(';'),
+                colors: news.colors.split(';'),
+                newLines: news.newLines.split(';'),
+            });
+        } else {
+            res.status(400).send();
+        }
     }
 
     async createNews(req: express.Request, res: express.Response) {

@@ -21,10 +21,10 @@ export class BackupsRoutes extends CommonRoutesConfig {
         this.app.post(`/v1/backups/register`, [
             jwtMiddleware.validAndUpToDateJWT,
             permissionMiddleware.permissionFlagRequired(PermissionFlag.ADMIN_PERMISSION),
-            body('gameName').isString().notEmpty().withMessage('Please specify a game for this backup file'),
-            body('fileName').isString().notEmpty().withMessage('Please specify the backup file name'),
-            body('downloadUrl').isString().notEmpty().withMessage('Please the backup file download url'),
-            body('fileSize').isNumeric().withMessage('Please specify the backup file size'),
+            body('gameName').isString().notEmpty(),
+            body('fileName').isString().notEmpty(),
+            body('downloadUrl').isString().notEmpty(),
+            body('fileSize').isNumeric(),
             BodyValidationMiddleware.verifyBodyFieldsErrors,
             BackupsMiddleware.validateBackupDoesntAlreadyExist,
             BackupsController.createBackup
@@ -33,10 +33,10 @@ export class BackupsRoutes extends CommonRoutesConfig {
         this.app.patch(`/v1/backups/:backupId`, [
             jwtMiddleware.validAndUpToDateJWT,
             permissionMiddleware.permissionFlagRequired(PermissionFlag.ADMIN_PERMISSION),
-            body('gameName').isString().notEmpty().withMessage('Please specify a game for this backup file').optional(),
-            body('fileName').isString().notEmpty().withMessage('Please specify the backup file name').optional(),
-            body('downloadUrl').isString().notEmpty().withMessage('Please the backup file download url').optional(),
-            body('fileSize').isNumeric().withMessage('Please specify the backup file size').optional(),
+            body('gameName').isString().notEmpty().optional(),
+            body('fileName').isString().notEmpty().optional(),
+            body('downloadUrl').isString().notEmpty().optional(),
+            body('fileSize').isNumeric().optional(),
             BodyValidationMiddleware.verifyBodyFieldsErrors,
             BackupsMiddleware.validateBackupExist,
             BackupsController.patch

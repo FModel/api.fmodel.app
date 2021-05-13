@@ -14,6 +14,7 @@ import { AuthRoutes } from './auth/auth.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
 import { NewsRoutes } from './news/news.routes.config';
 import { BackupsRoutes } from './backups/backups.routes.config';
+import { DesignsRoutes } from './designs/designs.routes.config';
 import debug from 'debug';
 import helmet from 'helmet';
 
@@ -22,7 +23,7 @@ const server: http.Server = http.createServer(app);
 const routes: Array<CommonRoutesConfig> = [];
 const debugLog: debug.IDebugger = debug('app');
 
-app.use(express.json());
+app.use(express.json({limit: '4MB'}));
 app.use(cors());
 app.use(helmet());
 
@@ -45,6 +46,7 @@ routes.push(new AuthRoutes(app));
 routes.push(new UsersRoutes(app));
 routes.push(new NewsRoutes(app));
 routes.push(new BackupsRoutes(app));
+routes.push(new DesignsRoutes(app));
 
 export default server.listen(3000, '0.0.0.0', () => {
     debugLog(`Server running and listening on port 3000`);

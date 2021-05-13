@@ -15,8 +15,8 @@ export class UsersRoutes extends CommonRoutesConfig {
 
     configureRoutes(): express.Application {
         this.app.post(`/v1/users/register`, [
-            body('username').isString().notEmpty().withMessage('Username can\'t be empty'),
-            body('password').isLength({ min: 5 }).isString().notEmpty().withMessage('Password must be 5+ characters long'),
+            body('username').isString().notEmpty(),
+            body('password').isLength({ min: 5 }).isString().notEmpty(),
             BodyValidationMiddleware.verifyBodyFieldsErrors,
             UsersMiddleware.validateUsernameAvailability,
             UsersController.createUser

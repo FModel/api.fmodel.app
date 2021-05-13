@@ -13,8 +13,8 @@ export class AuthRoutes extends CommonRoutesConfig {
 
     configureRoutes(): express.Application {
         this.app.post(`/v1/oauth/token`, [
-            body('username').isString().notEmpty().withMessage('Username can\'t be empty'),
-            body('password').isString().notEmpty().withMessage('Password can\'t be empty'),
+            body('username').isString().notEmpty(),
+            body('password').isString().notEmpty(),
             BodyValidationMiddleware.verifyBodyFieldsErrors,
             authMiddleware.verifyUserPassword,
             authController.createJWT
