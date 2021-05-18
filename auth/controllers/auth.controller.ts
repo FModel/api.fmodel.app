@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import debug from 'debug';
 import jwt from 'jsonwebtoken';
 
-const log: debug.IDebugger = debug('app:auth-controller');
+const log: debug.IDebugger = debug('app:auth-controllers');
 
 // @ts-expect-error
 const jwtSecret: string = process.env.JWT_SECRET;

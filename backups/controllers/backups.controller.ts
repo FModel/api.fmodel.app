@@ -2,7 +2,7 @@
 import backupsService from '../services/backups.service';
 import debug from "debug";
 
-const log: debug.IDebugger = debug('app:backups-controller');
+const log: debug.IDebugger = debug('app:backups-controllers');
 
 class BackupsController {
     async listBackups(req: express.Request, res: express.Response) {

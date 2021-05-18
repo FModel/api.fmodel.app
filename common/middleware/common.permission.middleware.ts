@@ -22,15 +22,15 @@ class CommonPermissionMiddleware {
 
     async onlySameUserOrAdminCanDoThisAction(req: express.Request, res: express.Response, next: express.NextFunction) {
         if (req.params && req.params.userId && req.params.userId === res.locals.jwt.userId) {
-            next();
+            return next();
         }
         
         const userPermissionFlag = parseInt(res.locals.jwt.permissionFlag);
         if (userPermissionFlag & PermissionFlag.ADMIN_PERMISSION) {
-            next();
+            return next();
         }
-        
-        res.status(403).send();
+
+        return res.status(403).send();
     }
 }
 

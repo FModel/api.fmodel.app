@@ -15,6 +15,7 @@ import { UsersRoutes } from './users/users.routes.config';
 import { NewsRoutes } from './news/news.routes.config';
 import { BackupsRoutes } from './backups/backups.routes.config';
 import { DesignsRoutes } from './designs/designs.routes.config';
+import { InfosRoutes } from './infos/infos.routes.config';
 import debug from 'debug';
 import helmet from 'helmet';
 
@@ -47,6 +48,7 @@ routes.push(new UsersRoutes(app));
 routes.push(new NewsRoutes(app));
 routes.push(new BackupsRoutes(app));
 routes.push(new DesignsRoutes(app));
+routes.push(new InfosRoutes(app));
 
 export default server.listen(3000, '0.0.0.0', () => {
     debugLog(`Server running and listening on port 3000`);

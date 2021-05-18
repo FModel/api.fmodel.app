@@ -2,7 +2,7 @@
 import designsService from '../services/designs.service';
 import debug from 'debug';
 
-const log: debug.IDebugger = debug('app:designs-controller');
+const log: debug.IDebugger = debug('app:designs-controllers');
 
 class DesignsController {
     async listDesigns(req: express.Request, res: express.Response) {

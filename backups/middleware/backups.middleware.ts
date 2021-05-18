@@ -1,9 +1,9 @@
 ﻿import express from 'express';
-import backupService from '../services/backups.service';
+import backupsService from '../services/backups.service';
 
 class BackupsMiddleware {
     async validateBackupExist(req: express.Request, res: express.Response, next: express.NextFunction) {
-        const backup = await backupService.getById(req.params.backupId);
+        const backup = await backupsService.getById(req.params.backupId);
         if (backup) {
             next();
         } else {
@@ -12,7 +12,7 @@ class BackupsMiddleware {
     }
     
     async validateBackupDoesntAlreadyExist(req: express.Request, res: express.Response, next: express.NextFunction) {
-        const backup = await backupService.getBackupByFileNameAndSize(req.body.fileName, req.body.fileSize);
+        const backup = await backupsService.getBackupByFileNameAndSize(req.body.fileName, req.body.fileSize);
         if (backup) {
             res.status(400).send({ errors: [`Backup '${req.body.fileName}' already exists, please PATCH it instead`] });
         } else {

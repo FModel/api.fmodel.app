@@ -71,16 +71,6 @@ class DesignsDao {
     }
 
     async removeDesignById(designId: string) {
-        // const fontIds = await this.Font.find({ joinId: designId }).select('_id').exec();
-        // for (const id of fontIds) {
-        //     await this.Typeface.deleteMany({ joinId: id }).exec();
-        // }
-        // const tagIds = await this.Tag.find({ joinId: designId }).select('_id').exec();
-        // for (const id of tagIds) {
-        //     await this.Dictionary.deleteMany({ joinId: id }).exec();
-        // }
-        // await this.Font.deleteMany({ joinId: designId }).exec();
-        // await this.Rarity.deleteMany({ joinId: designId }).exec();
         return this.Design.deleteOne({ _id: designId }).exec();
     }
 }

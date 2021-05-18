@@ -10,7 +10,7 @@ class JwtMiddleware {
         if (req.headers['authorization']) {
             try {
                 const authorization = req.headers['authorization'].split(' ');
-                if (authorization[0] !== 'Bearer') {
+                if (authorization[0].toUpperCase() !== 'Bearer'.toUpperCase()) {
                     return res.status(401).send();
                 } else {
                     res.locals.jwt = jwt.verify(authorization[1], jwtSecret);

@@ -4,7 +4,7 @@ import usersService from '../services/users.service';
 import argon2 from 'argon2';
 import debug from 'debug';
 
-const log: debug.IDebugger = debug('app:users-controller');
+const log: debug.IDebugger = debug('app:users-controllers');
 
 class UsersController {
     async listUsers(req: express.Request, res: express.Response) {
