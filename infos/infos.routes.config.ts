@@ -14,24 +14,26 @@ export class InfosRoutes extends CommonRoutesConfig {
     }
 
     configureRoutes(): express.Application {
-        this.app.get(`/v1/infos`, [
-            InfosController.listInfos
+        this.app.get(`/v1/infos/:updateMode`, [
+            InfosController.getInfoByMode
         ]);
 
         this.app.post(`/v1/infos/register`, [
             jwtMiddleware.validAndUpToDateJWT,
             permissionMiddleware.permissionFlagRequired(PermissionFlag.ADMIN_PERMISSION),
+            body('mode').isString().notEmpty(),
             body('version').isString().notEmpty(),
             body('downloadUrl').isString().notEmpty(),
             body('changelogUrl').isString().notEmpty(),
             BodyValidationMiddleware.verifyBodyFieldsErrors,
-            InfosMiddleware.validateInfoDoesntExistAlready,
+            InfosMiddleware.validateInfoDoesntAlreadyExist,
             InfosController.createInfo
         ]);
 
         this.app.patch(`/v1/infos/:infoId`, [
             jwtMiddleware.validAndUpToDateJWT,
             permissionMiddleware.permissionFlagRequired(PermissionFlag.ADMIN_PERMISSION),
+            body('mode').isString().notEmpty().optional(),
             body('version').isString().notEmpty().optional(),
             body('downloadUrl').isString().notEmpty().optional(),
             body('changelogUrl').isString().notEmpty().optional(),

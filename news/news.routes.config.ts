@@ -49,7 +49,7 @@ export class NewsRoutes extends CommonRoutesConfig {
             NewsController.listNews
         ]);
 
-        this.app.get(`/v1/news/versions`, [
+        this.app.get(`/v1/versions`, [
             jwtMiddleware.validAndUpToDateJWT,
             permissionMiddleware.permissionFlagRequired(PermissionFlag.ADMIN_PERMISSION),
             NewsController.listVersions

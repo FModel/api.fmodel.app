@@ -2,12 +2,12 @@
 import infosService from '../services/infos.service';
 
 class InfosMiddleware {
-    async validateInfoDoesntExistAlready(req: express.Request, res: express.Response, next: express.NextFunction) {
-        const infos = await infosService.list(5, 0);
-        if (infos.length < 1) {
-            next();
+    async validateInfoDoesntAlreadyExist(req: express.Request, res: express.Response, next: express.NextFunction) {
+        const info = await infosService.getByMode(req.body.mode);
+        if (info) {
+            res.status(400).send({ errors: [`An info in '${req.body.mode}' mode already exists, please PATCH it instead`] });
         } else {
-            res.status(400).send({ errors: [`An info already exists, please PATCH it instead`] });
+            next();
         }
     }
 

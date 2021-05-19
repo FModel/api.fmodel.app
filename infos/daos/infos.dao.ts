@@ -12,6 +12,7 @@ class InfosDao {
 
     infoSchema = new this.Schema({
         _id: String,
+        mode: String,
         version: String,
         downloadUrl: String,
         changelogUrl: String,
@@ -39,8 +40,12 @@ class InfosDao {
         return this.Info.findOne({ _id: infoId }).exec();
     }
 
+    async getInfoByMode(updateMode: string) {
+        return this.Info.findOne({ mode: updateMode }).select('-_id -__v -mode').exec();
+    }
+
     async getInfos(limit = 5, page = 0) {
-        return this.Info.find().limit(limit).skip(limit * page).select('-_id -__v').exec();
+        return this.Info.find().limit(limit).skip(limit * page).exec();
     }
 
     async updateInfoById(infoId: string, infoFields: PatchInfoDto | PutInfoDto) {

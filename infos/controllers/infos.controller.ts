@@ -5,9 +5,9 @@ import debug from 'debug';
 const log: debug.IDebugger = debug('app:infos-controllers');
 
 class InfosController {
-    async listInfos(req: express.Request, res: express.Response) {
-        const info = await infosService.list(1, 0);
-        res.status(200).send(info[0]);
+    async getInfoByMode(req: express.Request, res: express.Response) {
+        const info = await infosService.getByMode(req.params.updateMode);
+        res.status(200).send(info);
     }
 
     async getInfoById(req: express.Request, res: express.Response) {

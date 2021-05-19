@@ -17,6 +17,10 @@ class InfosService implements CRUD {
         return InfosDao.getInfoById(infoId);
     }
 
+    async getByMode(updateMode: string) {
+        return InfosDao.getInfoByMode(updateMode);
+    }
+
     async putById(infoId: string, resource: PutInfoDto): Promise<any> {
         return InfosDao.updateInfoById(infoId, resource);
     }
