@@ -12,7 +12,7 @@ class BackupsMiddleware {
     }
     
     async validateBackupDoesntAlreadyExist(req: express.Request, res: express.Response, next: express.NextFunction) {
-        const backup = await backupsService.getBackupByFileNameAndSize(req.body.fileName, req.body.fileSize);
+        const backup = await backupsService.getBackupByFileName(req.body.fileName);
         if (backup) {
             res.status(400).send({ errors: [`Backup '${req.body.fileName}' already exists, please PATCH it instead`] });
         } else {

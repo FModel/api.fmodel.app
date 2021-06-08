@@ -9,8 +9,8 @@ class BackupsService implements CRUD {
         return BackupsDao.getBackups(limit, page);
     }
 
-    async listByGame(gameName: string, limit: number, page: number) {
-        return BackupsDao.getBackupsByGame(gameName, limit, page);
+    async listByGame(gameName: string, limit: number) {
+        return BackupsDao.getBackupsByGame(gameName, limit);
     }
 
     async create(resource: CreateBackupDto) {
@@ -21,8 +21,8 @@ class BackupsService implements CRUD {
         return BackupsDao.getBackupById(backupId);
     }
 
-    async getBackupByFileNameAndSize(fileName: string, fileSize: number) {
-        return BackupsDao.getBackupByFileNameAndSize(fileName, fileSize);
+    async getBackupByFileName(fileName: string) {
+        return BackupsDao.getBackupByFileName(fileName);
     }
 
     async putById(backupId: string, resource: PutBackupDto): Promise<any> {

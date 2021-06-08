@@ -38,16 +38,20 @@ class BackupsDao {
         return this.Backup.findOne({ _id: backupId }).exec();
     }
 
-    async getBackupByFileNameAndSize(fileName: string, fileSize: number) {
-        return this.Backup.findOne({ fileName: fileName, fileSize: fileSize }).exec();
+    async getBackupByFileName(fileName: string) {
+        return this.Backup.findOne({ fileName: fileName }).exec();
     }
 
     async getBackups(limit = 5, page = 0) {
         return this.Backup.find().limit(limit).skip(limit * page).exec();
     }
 
-    async getBackupsByGame(gameName: string, limit = 5, page = 0) {
-        return this.Backup.find({ gameName: gameName }).limit(limit).skip(limit * page).select('-_id gameName fileName downloadUrl fileSize').exec();
+    async getBackupsByGame(gameName: string, limit = 5) {
+        let backupCount = await this.Backup.countDocuments({ gameName: gameName }).collation({ locale: 'en', strength: 2 });
+        if (backupCount < limit) {
+            backupCount = limit;
+        }
+        return this.Backup.find({ gameName: gameName }).collation({ locale: 'en', strength: 2 }).skip(backupCount - limit).select('-_id gameName fileName downloadUrl fileSize').exec();
     }
 
     async updateBackupById(backupId: string, backupFields: PatchBackupDto | PutBackupDto) {

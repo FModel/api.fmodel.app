@@ -11,7 +11,7 @@ class BackupsController {
     }
     
     async listBackupsByGame(req: express.Request, res: express.Response) {
-        const backups = await backupsService.listByGame(req.params.gameName, 5, 0);
+        const backups = await backupsService.listByGame(req.params.gameName, 5);
         res.status(200).send(backups);
     }
     

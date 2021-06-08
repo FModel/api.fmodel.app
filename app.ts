@@ -9,6 +9,7 @@ import * as http from 'http';
 import * as winston from 'winston';
 import * as expressWinston from 'express-winston';
 import cors from 'cors';
+import RateLimit from 'express-rate-limit';
 import { CommonRoutesConfig } from './common/common.routes.config';
 import { AuthRoutes } from './auth/auth.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
@@ -23,10 +24,15 @@ const app: express.Application = express();
 const server: http.Server = http.createServer(app);
 const routes: Array<CommonRoutesConfig> = [];
 const debugLog: debug.IDebugger = debug('app');
+const limiter: RateLimit.RateLimit = RateLimit({
+    windowMs: 60 * 1000,
+    max: 5
+});
 
 app.use(express.json({limit: '4MB'}));
 app.use(cors());
 app.use(helmet());
+app.use(limiter);
 
 const loggerOptions: expressWinston.LoggerOptions = {
     transports: [new winston.transports.Console()],
