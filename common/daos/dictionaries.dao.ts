@@ -36,8 +36,24 @@ class DictionariesDao {
         return this.Dictionary.find({ joinId: joinId }).select('-_id -__v -joinId').exec();
     }
 
+    async getByJoinIdAndKey(joinId: string, key: string) {
+        return this.Dictionary.findOne({ joinId: joinId, key: key }).select('-_id -__v -joinId').exec();
+    }
+
+    async editByJoinIdAndKey(joinId: string, key: string, value: string) {
+        return await this.Dictionary.findOneAndUpdate(
+            { joinId: joinId, key: key },
+            { $set: { value: value }},
+            { new: true }
+        ).exec();
+    }
+
     async removeAllByJoinId(joinId: string) {
         return this.Dictionary.deleteMany({ joinId: joinId }).exec();
+    }
+    
+    async removeByJoinIdAndKey(joinId: string, key: string) {
+        return this.Dictionary.deleteMany({ joinId: joinId, key: key }).exec();
     }
 }
 
