@@ -51,14 +51,18 @@ class GamesService implements CRUD {
         for (const [key, val] of Object.entries(resource.versions)) {
             const versionId = await VersionsDao.addVersionFields(gameId, key, val);
             
-            if (!val.customVersions) continue;
-            for (const [k, v] of Object.entries(val.customVersions)) {
-                await DictionariesDao.addDictionary(versionId + '_0', k, v as string);
+            if (val.customVersions)
+            {
+                for (const [k, v] of Object.entries(val.customVersions)) {
+                    await DictionariesDao.addDictionary(versionId + '_0', k, v as string);
+                }
             }
 
-            if (!val.options) continue;
-            for (const [k, v] of Object.entries(val.options)) {
-                await DictionariesDao.addDictionary(versionId + '_1', k, v as string);
+            if (val.options)
+            {
+                for (const [k, v] of Object.entries(val.options)) {
+                    await DictionariesDao.addDictionary(versionId + '_1', k, v as string);
+                }
             }
         }
         return gameId;
@@ -67,10 +71,19 @@ class GamesService implements CRUD {
     async createVersion(gameName: string, resource: any) {
         const game = await GamesDao.getGameByName(gameName);
         const versionId = await VersionsDao.addVersion(game._id, resource.gameVersion, resource.gameEnum, resource.ueVer);
-        if (!resource.customVersions) return versionId;
+        
+        if (resource.customVersions)
+        {
+            for (const [k, v] of Object.entries(resource.customVersions)) {
+                await DictionariesDao.addDictionary(versionId + '_0', k, v as string);
+            }
+        }
 
-        for (const [k, v] of Object.entries(resource.customVersions)) {
-            await DictionariesDao.addDictionary(versionId + '_0', k, v as string);
+        if (resource.options)
+        {
+            for (const [k, v] of Object.entries(resource.options)) {
+                await DictionariesDao.addDictionary(versionId + '_1', k, v as string);
+            }
         }
         return versionId;
     }
