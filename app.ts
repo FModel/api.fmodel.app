@@ -32,10 +32,12 @@ app.use(helmet());
 const loggerOptions: expressWinston.LoggerOptions = {
     transports: [new winston.transports.Console()],
     format: winston.format.combine(
-        winston.format.json(),
-        winston.format.prettyPrint(),
-        winston.format.colorize({ all: true })
+        winston.format.timestamp({
+            format: 'MMM-DD-YYYY HH:mm:ss'
+        }),
+        winston.format.printf(info => `${[info.timestamp]}: ${info.message}`),
     ),
+    msg: "[{{req.method}}({{res.statusCode}})] \"{{req.headers['cf-connecting-ip']}}\" requested \"{{req.url}}\" in {{res.responseTime}}ms - \"{{req.headers['user-agent']}}\"",
 };
 
 if (!process.env.DEBUG) {
