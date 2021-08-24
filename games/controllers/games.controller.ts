@@ -7,7 +7,11 @@ const log: debug.IDebugger = debug('app:games-controllers');
 class GamesController {
     async listVersionsByGame(req: express.Request, res: express.Response) {
         const versions = await gamesService.listByGame(req.params.gameName);
-        res.status(200).send(versions);
+        if (versions) {
+            res.status(200).send(versions);
+        } else {
+            res.status(404).send({ errors: [`Game '${req.params.gameName}' doesn't exist`] });
+        }
     }
 
     async createGameAndVersions(req: express.Request, res: express.Response) {

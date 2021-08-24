@@ -17,7 +17,11 @@ class DesignsController {
 
     async getDesignByName(req: express.Request, res: express.Response) {
         const design = await designsService.getDesignByName(req.params.designName);
-        res.status(200).send(design);
+        if (design) {
+            res.status(200).send(design);
+        } else {
+            res.status(404).send({ errors: [`Design '${req.params.designName}' doesn't exist`] });
+        }
     }
 
     async createDesign(req: express.Request, res: express.Response) {

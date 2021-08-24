@@ -9,6 +9,8 @@ import * as http from 'http';
 import * as winston from 'winston';
 import * as expressWinston from 'express-winston';
 import cors from 'cors';
+import debug from 'debug';
+import helmet from 'helmet';
 import { CommonRoutesConfig } from './common/common.routes.config';
 import { AuthRoutes } from './auth/auth.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
@@ -17,8 +19,6 @@ import { BackupsRoutes } from './backups/backups.routes.config';
 import { DesignsRoutes } from './designs/designs.routes.config';
 import { GamesRoutes } from './games/games.routes.config'; // big mess
 import { InfosRoutes } from './infos/infos.routes.config';
-import debug from 'debug';
-import helmet from 'helmet';
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
@@ -32,16 +32,21 @@ app.use(helmet());
 const loggerOptions: expressWinston.LoggerOptions = {
     transports: [new winston.transports.Console()],
     format: winston.format.combine(
-        winston.format.timestamp({
-            format: 'MMM-DD-YYYY HH:mm:ss'
-        }),
-        winston.format.printf(info => `${[info.timestamp]}: ${info.message}`),
+        winston.format.json(),
+        winston.format.prettyPrint(),
+        winston.format.colorize({ all: true })
     ),
-    msg: "[{{req.method}}({{res.statusCode}})] \"{{req.headers['cf-connecting-ip']}}\" requested \"{{req.url}}\" in {{res.responseTime}}ms - \"{{req.headers['user-agent']}}\"",
+    msg: "[{{req.method}}({{res.statusCode}})] \"{{req.headers['cf-connecting-ip']}}\" requested \"{{req.url}}\" in {{res.responseTime}}ms",
 };
 
 if (!process.env.DEBUG) {
     loggerOptions.meta = false; // when not debugging, make terse
+    loggerOptions.format = winston.format.combine(
+        winston.format.timestamp({
+            format: 'MMM-DD-YYYY HH:mm:ss'
+        }),
+        winston.format.printf(info => `${[info.timestamp]}: ${info.message}`),
+    );
 }
 
 app.use(expressWinston.logger(loggerOptions));
