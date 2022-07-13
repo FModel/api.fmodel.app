@@ -26,7 +26,14 @@ class NewsController {
     }
 
     async getNewsByVersion(req: express.Request, res: express.Response) {
-        const news = await newsService.getNewsByVersion(req.params.version);
+        let news;
+        if (req.query && typeof req.query.game === 'string') {
+            news = await newsService.getNewsByVersionAndGame(req.params.version, req.query.game);
+        }
+        if (!news) {
+            news = await newsService.getNewsByVersion(req.params.version);
+        }
+        
         if (news) {
             res.status(200).send({
                 messages: news.messages.split(';'),

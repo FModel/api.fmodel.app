@@ -22,6 +22,7 @@ export class NewsRoutes extends CommonRoutesConfig {
             jwtMiddleware.validAndUpToDateJWT,
             permissionMiddleware.permissionFlagRequired(PermissionFlag.ADMIN_PERMISSION),
             body('version').isString().notEmpty(),
+            body('game').isString().notEmpty(),
             body('messages').isArray().notEmpty(),
             body('colors').isArray().notEmpty(),
             body('newLines').isArray().notEmpty(),

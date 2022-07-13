@@ -13,6 +13,7 @@ class NewsDao {
     newsSchema = new this.Schema({
         _id: String,
         version: String,
+        game: String,
         messages: String,
         colors: String,
         newLines: String
@@ -29,6 +30,7 @@ class NewsDao {
         const news = new this.News({
             _id: newsId,
             version: newsFields.version,
+            game: newsFields.game,
             messages: newsFields.messages.join(';'),
             colors: newsFields.colors.join(';'),
             newLines: newsFields.newLines.join(';')
@@ -43,6 +45,10 @@ class NewsDao {
 
     async getNewsByVersion(version: string) {
         return this.News.findOne({ version: version }).select('-_id messages colors newLines').exec();
+    }
+
+    async getNewsByVersionAndGame(version: string, game: string) {
+        return this.News.findOne({ version: version, game: game }).collation({ locale: 'en', strength: 2 }).select('-_id messages colors newLines').exec();
     }
 
     async getNews(limit = 5, page = 0) {
@@ -65,6 +71,7 @@ class NewsDao {
         return await this.News.findOneAndUpdate(
             { version: version },
             { $set: {
+                    game: newsFields.game,
                     messages: newsFields.messages?.join(';'),
                     colors: newsFields.colors?.join(';'),
                     newLines: newsFields.newLines?.join(';')

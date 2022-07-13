@@ -25,6 +25,10 @@ class NewsService implements CRUD {
         return NewsDao.getNewsByVersion(version);
     }
 
+    async getNewsByVersionAndGame(version: string, game: string) {
+        return NewsDao.getNewsByVersionAndGame(version, game);
+    }
+
     async putById(newsId: string, resource: PutNewsDto): Promise<any> {
         return NewsDao.updateNewsById(newsId, resource);
     }
