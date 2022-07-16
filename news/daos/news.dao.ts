@@ -71,7 +71,6 @@ class NewsDao {
         return await this.News.findOneAndUpdate(
             { version: version },
             { $set: {
-                    game: newsFields.game,
                     messages: newsFields.messages?.join(';'),
                     colors: newsFields.colors?.join(';'),
                     newLines: newsFields.newLines?.join(';')

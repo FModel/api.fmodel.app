@@ -15,14 +15,14 @@ export class NewsRoutes extends CommonRoutesConfig {
     
     configureRoutes(): express.Application {
         this.app.get(`/v1/news/:version`, [
-            NewsController.getNewsByVersion
+            NewsController.getNewsByVersionAndGame
         ]);
         
         this.app.post(`/v1/news/register`, [
             jwtMiddleware.validAndUpToDateJWT,
             permissionMiddleware.permissionFlagRequired(PermissionFlag.ADMIN_PERMISSION),
             body('version').isString().notEmpty(),
-            body('game').isString().notEmpty(),
+            body('game').isString(), // https://github.com/express-validator/express-validator/issues/471
             body('messages').isArray().notEmpty(),
             body('colors').isArray().notEmpty(),
             body('newLines').isArray().notEmpty(),
@@ -35,6 +35,7 @@ export class NewsRoutes extends CommonRoutesConfig {
         this.app.put(`/v1/news/:version`, [
             jwtMiddleware.validAndUpToDateJWT,
             permissionMiddleware.permissionFlagRequired(PermissionFlag.ADMIN_PERMISSION),
+            body('game').isString(), // https://github.com/express-validator/express-validator/issues/471
             body('messages').isArray().notEmpty(),
             body('colors').isArray().notEmpty(),
             body('newLines').isArray().notEmpty(),
