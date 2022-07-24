@@ -1,5 +1,6 @@
 ﻿import express from 'express';
 import newsService from '../services/news.service';
+import counterService from '../../counter/services/counter.service';
 import debug from "debug";
 
 const log: debug.IDebugger = debug('app:news-controllers');
@@ -38,6 +39,7 @@ class NewsController {
         }
         
         if (news) {
+            await counterService.increment("E_NEWS_GAME_HIT_COUNT_FOR_" + game);
             res.status(200).send({
                 messages: news.messages.split(';'),
                 colors: news.colors.split(';'),
