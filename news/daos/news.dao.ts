@@ -44,7 +44,7 @@ class NewsDao {
     }
 
     async getNewsByVersion(version: string) {
-        return this.News.findOne({ version: version }).select('-_id messages colors newLines').exec();
+        return this.News.findOne({ version: version, game: "" }).select('-_id messages colors newLines').exec();
     }
 
     async getNewsByVersionAndGame(version: string, game: string) {
