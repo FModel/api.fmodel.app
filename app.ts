@@ -19,6 +19,7 @@ import { BackupsRoutes } from './backups/backups.routes.config';
 import { DesignsRoutes } from './designs/designs.routes.config';
 import { GamesRoutes } from './games/games.routes.config'; // big mess
 import { InfosRoutes } from './infos/infos.routes.config';
+import { DonationsRoutes } from './donations/donations.routes.config';
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
@@ -26,6 +27,12 @@ const routes: Array<CommonRoutesConfig> = [];
 const debugLog: debug.IDebugger = debug('app');
 
 app.use(express.json({limit: '4MB'}));
+app.use(express.urlencoded({ extended: true,
+    verify: function(req, res, buf, encoding) {
+        // @ts-ignore
+        req.textBody = buf.toString(encoding);
+    }
+}))
 app.use(cors());
 app.use(helmet());
 
@@ -58,6 +65,7 @@ routes.push(new BackupsRoutes(app));
 routes.push(new DesignsRoutes(app));
 routes.push(new GamesRoutes(app));
 routes.push(new InfosRoutes(app));
+routes.push(new DonationsRoutes(app));
 
 export default server.listen(3000, '0.0.0.0', () => {
     debugLog(`Server running and listening on port 3000`);

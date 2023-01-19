@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "argon2": "^0.27.2",
+    "axios": "^0.27.2",
     "cors": "^2.8.5",
     "debug": "^4.3.1",
     "dotenv": "^8.2.0",
