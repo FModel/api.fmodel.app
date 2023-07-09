@@ -1,4 +1,5 @@
 ﻿import express from "express";
+import donationsService from '../services/donations.service';
 import debug from "debug";
 import axios from "axios";
 
@@ -9,6 +10,11 @@ const paypalIpnUrl: string = process.env.PAYPAL_IPN_URL;
 const log: debug.IDebugger = debug('app:donations-controllers');
 
 class DonationsController {
+    async getAllDonators(req: express.Request, res: express.Response) {
+        const users = await donationsService.list(100, 0);
+        res.status(200).send(users);
+    }
+    
     async sendToDiscord(req: express.Request, res: express.Response) {
         if (req.body.txn_id === undefined) {
             log('something went wrong while processing the payment');
@@ -20,10 +26,18 @@ class DonationsController {
                     'User-Agent': 'FModel/api.fmodel.app/verify-ipn'
                 }
             })
-                .then(function (response) {
+                .then(async function (response) {
                     if (response.data === "VERIFIED") {
                         let name = req.body.payer_business_name;
                         if (name === undefined) name = req.body.first_name;
+
+                        const resource = {payerId: req.body.payer_id, username: name, total: req.body.mc_gross || 0};
+                        const donationId = await donationsService.getById(resource.payerId);
+                        if (!donationId) {
+                            await donationsService.create(resource);
+                        } else {
+                            await donationsService.patchById(donationId, resource.total)
+                        }
 
                         axios.post(discordWebhookUrl, {
                             username: 'Paypal',
