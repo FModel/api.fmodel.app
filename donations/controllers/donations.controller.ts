@@ -32,11 +32,12 @@ class DonationsController {
                         if (name === undefined) name = req.body.first_name;
 
                         const resource = {payerId: req.body.payer_id, username: name, total: req.body.mc_gross || 0};
-                        const donationId = await donationsService.getById(resource.payerId);
-                        if (!donationId) {
+                        const donation = await donationsService.getById(resource.payerId);
+                        if (!donation) {
                             await donationsService.create(resource);
                         } else {
-                            await donationsService.patchById(donationId, resource.total)
+                            await donationsService.patchById(donation._id, resource.total);
+                            name = donation.username;
                         }
 
                         axios.post(discordWebhookUrl, {
