@@ -37,7 +37,7 @@ class DonationsDao {
     }
 
     async getDonations(limit = 25, page = 0) {
-        return this.Donation.find().limit(limit).skip(limit * page).sort({count: -1}).select('-_id -total -__v').exec();
+        return this.Donation.find().limit(limit).skip(limit * page).sort({count: -1, total: -1}).select('-_id -total -__v').exec();
     }
     
     async updateDonationById(donationId: string, increment: number) {
