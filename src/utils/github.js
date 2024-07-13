@@ -61,7 +61,7 @@ module.exports = {
                 color: 0xFAC11B,
                 title: 'Your Backup Has Been Uploaded',
                 description: 'Your backup has been uploaded and registered successfully. You can now download it using the link below.',
-                thumbnail: {url: 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678134-sign-check-512.png'},
+                thumbnail: { url: 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678134-sign-check-512.png' },
                 fields: [
                     { name: 'Project', value: pending.projectName, inline: true },
                     { name: 'File', value: pending.fileName, inline: true },
@@ -80,14 +80,12 @@ module.exports = {
         await interaction.followUp({ content: `[${reason}](${message.url})`, embeds: [], components: [] });
     },
     
-    async rejectBackup(interaction, pending) {
+    async rejectBackup(interaction, reason, pending) {
         if (!pending) throw new InteractionError('Backup not found.');
         if (pending.locked) throw new InteractionError('Backup is locked.');
-        
-        // TODO: modal for custom reason
 
-        const reason = `Rejected by ${interaction.user.tag} (${interaction.user.id}).`;
-        const updated = await updatePendingBackup(pending._id, false, reason);
+        const rejectedBy = `Rejected by ${interaction.user.tag} (${interaction.user.id})`;
+        await updatePendingBackup(pending._id, false, `${rejectedBy}${(reason && ` for '${reason}'`)}`);
         logger.info(`${interaction.user.tag} rejected the upload of backup: ${pending.fileName} by ${pending.userId} (${pending._id}).`);
 
         const message = await client.channels.cache.get(pending.channelId).send({
@@ -96,15 +94,15 @@ module.exports = {
                 color: 0xFAC11B,
                 title: 'Your Backup Has Been Rejected',
                 description: 'Your backup has been rejected. Please review the reason and resubmit the backup if necessary.',
-                thumbnail: {url: 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678069-sign-error-512.png'},
+                thumbnail: { url: 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678069-sign-error-512.png' },
                 fields: [
                     { name: 'Project', value: pending.projectName, inline: true },
                     { name: 'File', value: pending.fileName, inline: true },
                     { name: 'Size', value: pending.formattedSize, inline: true },
-                    { name: 'Reason', value: updated.reason ?? 'TODO' },
+                    ...(reason ? [{ name: 'Reason', value: reason, inline: false }] : []),
                 ],
             }]
         });
-        await interaction.update({ content: `[${reason}](${message.url})`, embeds: [], components: [] });
+        await interaction.update({ content: `[${rejectedBy}](${message.url})`, embeds: [], components: [] });
     }
 }
