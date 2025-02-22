@@ -8,5 +8,13 @@
         const i = Math.floor(Math.log(bytes) / Math.log(k));
 
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    },
+
+    formatDate(date) {
+        return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+    },
+    
+    formatNumber(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 }

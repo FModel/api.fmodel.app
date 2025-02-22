@@ -1,5 +1,4 @@
-﻿const { client } = require('./client');
-const { connectDatabase } = require('./database');
+﻿const { connectDatabase } = require('./database');
 const {
     registerEvents,
     registerCommands,
@@ -8,6 +7,7 @@ const {
     reload,
     login,
 } = require('./registers');
+const { client } = require('./client');
 
 connectDatabase();
 registerEvents(client);

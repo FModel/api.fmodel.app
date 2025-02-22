@@ -14,7 +14,7 @@ const connectDatabase = () => {
     mongoose.connection.on('connected', () => {
         logger.info('MongoDB is connected');
         // connectServer();
-        // connectCron();
+        connectCron();
     });
     mongoose.connection.on('disconnected', () => logger.info('MongoDB is disconnected'));
     mongoose.connection.on('reconnected', () => logger.info('MongoDB is reconnected'));

@@ -24,13 +24,20 @@ module.exports = {
     },
     async execute(interaction) {
         isAdmin(interaction);
+
+        const reason = interaction.fields.getTextInputValue('reasonInput');
         
         const parts = this.owner.split(':');
         switch (parts[1]) {
             case 'fbkp':
-                const reason = interaction.fields.getTextInputValue('reasonInput');
                 const pending = await getPendingBackup(parts[2]);
                 await rejectBackup(interaction, reason, pending);
+                break;
+            case 'mistral':
+                await interaction.update({
+                    content: `${interaction.message.content.split(` ${parts[2]}\n\n`)[0]}\n\nRejected by ${interaction.user.tag} (${interaction.user.id}) for ${reason}.`,
+                    components: [],
+                });
                 break;
             default:
                 throw new InteractionError('Invalid approval type.');

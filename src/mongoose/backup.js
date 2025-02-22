@@ -81,8 +81,8 @@ const PendingBackup = mongoose.model('PendingBackup', new Schema(
 module.exports = {
     async createPendingBackup(userId, channelId, file) {
         return await PendingBackup.create({
-            userId: userId,
-            channelId: channelId,
+            userId,
+            channelId,
             fileName: file.name,
             fileSize: file.size,
             downloadUrl: file.url,

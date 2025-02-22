@@ -2,7 +2,32 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { client } = require('../client');
 const { updatePendingBackup } = require('#db/backup');
+const { createStatistic } = require('#db/statistic');
 const InteractionError = require('./interactionError');
+
+const countRecursive = async (url, count = 0) => {
+    return fetch(url)
+        .then(res => Promise.all([res.status, res.json(), res.headers.get('Link')]))
+        .then(([status, releases, link]) => {
+            if (status !== 200) return count;
+            
+            releases.forEach(release => {
+                const asset = release.assets.find(a => a.name === 'FModel.zip' && a.state === 'uploaded');
+                if (!asset) return;
+
+                count += asset.download_count;
+            });
+
+            if (link) {
+                const next = link.match(/<(.*?)>; *?rel="(.*?)"/gi).find(l => l.includes('; rel="next"'));
+                if (next) {
+                    return countRecursive(next.match(/<(.*?)>/)[1], count);
+                }
+            }
+            
+            return count;
+        });
+};
 
 module.exports = {
     async approveBackup(interaction, pending) {
@@ -104,5 +129,17 @@ module.exports = {
             }]
         });
         await interaction.update({ content: `[${rejectedBy}](${message.url})`, embeds: [], components: [] });
-    }
+    },
+    
+    gatherStats() {
+        fetch('https://api.github.com/repos/4sval/FModel')
+            .then(res => res.json())
+            .then(async data => {
+                const downloadCount = await countRecursive(data.releases_url.replace('{/id}', ''));
+                await createStatistic(data.stargazers_count, data.forks_count, downloadCount);
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    },
 }

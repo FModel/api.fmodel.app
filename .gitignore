@@ -130,3 +130,6 @@ dist
 .pnp.*
 
 .idea/
+
+mistral_sys.md
+sysprompt.md
