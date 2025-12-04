@@ -22,7 +22,7 @@ const Statistic = mongoose.model('Statistic', new Schema(
         logger.info('Sending weekly statistics to admin channel');
 
         const current = await (await fetch('https://api.fmodel.app/v1/infos/Qa')).json();
-        const lastWeek = await Statistic.find({ createdAt: { $gte: new Date(today).setDate(today.getDate() - 8), $lt: new Date(today) } });
+        const lastWeek = await Statistic.find({ createdAt: { $gte: new Date(today).setDate(today.getDate() - 7), $lte: new Date(today) } });
         
         let downloads = '';
         let stars = '';

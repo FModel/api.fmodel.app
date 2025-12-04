@@ -10,8 +10,9 @@
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     },
 
-    formatDate(date) {
-        return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+    formatDate(date, dayOffset = -1) {
+        const d = new Date(date).setDate(date.getDate() + dayOffset);
+        return new Date(d).toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
     },
     
     formatNumber(number) {

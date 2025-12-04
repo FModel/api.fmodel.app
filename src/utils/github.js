@@ -12,10 +12,8 @@ const countRecursive = async (url, count = 0) => {
             if (status !== 200) return count;
             
             releases.forEach(release => {
-                const asset = release.assets.find(a => a.name === 'FModel.zip' && a.state === 'uploaded');
-                if (!asset) return;
-
-                count += asset.download_count;
+                const assets = release.assets.filter(a => a.name.endsWith('.zip') && a.state === 'uploaded');
+                count += assets.reduce((acc, asset) => acc + asset.download_count, 0);
             });
 
             if (link) {
