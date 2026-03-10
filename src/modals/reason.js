@@ -40,7 +40,7 @@ module.exports = {
                 });
                 break;
             default:
-                throw new InteractionError('Invalid approval type.');
+                throw new InteractionError('Invalid reject type.');
         }
     }
 }
