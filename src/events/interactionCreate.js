@@ -13,7 +13,7 @@ module.exports = {
         } else if (interaction.isStringSelectMenu()) {
             return;
         } else if (interaction.isModalSubmit()) {
-            stateMachine = interaction.client.modals.get(interaction.customId);
+            stateMachine = interaction.client.modals.get(interaction.customId.split(':')[0]);
         }
 
         if (!stateMachine) {
@@ -30,10 +30,15 @@ module.exports = {
                 color: 0xf04a47,
                 description: `:x: ${error instanceof InteractionError ? error.message.trim() : 'There was an error while executing this command!'}`,
             }];
-            if (interaction.replied || interaction.deferred) {
-                await interaction.followUp({ embeds });
-            } else {
-                await interaction.reply({ embeds });
+
+            try {
+                if (interaction.replied || interaction.deferred) {
+                    await interaction.followUp({ embeds });
+                } else {
+                    await interaction.reply({ embeds });
+                }
+            } catch (replyError) {
+                logger.error(`Could not report error to ${interaction.user.tag}: ${replyError.message}`);
             }
         }
     },
